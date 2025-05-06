@@ -19,11 +19,16 @@ const Navigation = () => {
   const handleShow = () => setShow(true);
 
   return (
-    <Navbar expand="lg" className="bg-body-tertiary d-flex gap-4">
+    <Navbar expand="lg" className="bg-body-tertiary d-flex gap-4 sticky-top">
       <Container fluid>
-        <Button variant="primary" onClick={handleShow}>
-          <i className="fa fa-bars"></i>
-        </Button>
+
+        <div className="d-flex align-items-center gap-3">
+          <Button variant="primary" onClick={handleShow}>
+            <i className="fa fa-bars"></i>
+          </Button>
+
+          <Navbar.Brand href="#">Admin's Panel</Navbar.Brand>
+        </div>
 
         <Offcanvas show={show} onHide={handleClose}>
           <Offcanvas.Header closeButton>
@@ -31,20 +36,26 @@ const Navigation = () => {
           </Offcanvas.Header>
           <Offcanvas.Body>
             <ListGroup as="ul">
-              <ListGroup.Item as="li" >
-              <Link to="/AdminDash"><i className="fa-solid fa-house"></i> Dashboard</Link> 
+              <ListGroup.Item as="li" className="border-0">
+                <Link to="/AdminDash">
+                  <i className="fa-solid fa-house"></i> Dashboard
+                </Link>
               </ListGroup.Item>
-              <ListGroup.Item as="li">
-              <Link to="/Analysis"><i className="fa-solid fa-magnifying-glass-chart"></i> Analysis</Link>                
+              <ListGroup.Item as="li" className="border-0">
+                <Link to="/Analysis">
+                  <i className="fa-solid fa-magnifying-glass-chart"></i>{" "}
+                  Analysis
+                </Link>
               </ListGroup.Item>
-              <ListGroup.Item as="li" >
-              <Link to="/UserManagement"><i className="fa fa-user"></i> User Management</Link>  
+              <ListGroup.Item as="li" className="border-0">
+                <Link to="/UserManagement">
+                  <i className="fa fa-user"></i> User Management
+                </Link>
               </ListGroup.Item>
             </ListGroup>
           </Offcanvas.Body>
         </Offcanvas>
 
-        <Navbar.Brand href="#">Admin's Panel</Navbar.Brand>
         <Navbar.Toggle aria-controls="navbarScroll" />
         <Navbar.Collapse id="navbarScroll">
           <Nav
@@ -52,7 +63,7 @@ const Navigation = () => {
             style={{ maxHeight: "100px" }}
             navbarScroll
           >
-           <Nav.Link href="#action1">
+            <Nav.Link href="#action1">
               <img
                 src={ProfileImage}
                 alt="Profile"
@@ -63,7 +74,6 @@ const Navigation = () => {
               {" "}
               <i className="fa-solid fa-lock"></i> LogOut{" "}
             </Nav.Link>
-           
           </Nav>
         </Navbar.Collapse>
       </Container>

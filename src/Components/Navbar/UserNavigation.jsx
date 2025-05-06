@@ -21,9 +21,13 @@ const Navigation = () => {
   return (
     <Navbar expand="lg" className="bg-body-tertiary d-flex gap-4">
       <Container fluid>
-        <Button variant="primary" onClick={handleShow}>
-          <i className="fa fa-bars"></i>
-        </Button>
+        <div className="d-flex align-items-center gap-3">
+          <Button variant="primary" onClick={handleShow}>
+            <i className="fa fa-bars"></i>
+          </Button>
+
+          <Navbar.Brand href="#">User's Panel</Navbar.Brand>
+        </div>
 
         <Offcanvas show={show} onHide={handleClose}>
           <Offcanvas.Header closeButton>
@@ -31,12 +35,12 @@ const Navigation = () => {
           </Offcanvas.Header>
           <Offcanvas.Body>
             <ListGroup as="ul">
-              <ListGroup.Item as="li">
+              <ListGroup.Item as="li" className="border-0">
                 <Link to="/UserDash">
                   <i className="fa-solid fa-house"></i> Dashboard
                 </Link>
               </ListGroup.Item>
-              <ListGroup.Item as="li">
+              <ListGroup.Item as="li" className="border-0">
                 <Link to="/UserAnalysis">
                   <i className="fa-solid fa-magnifying-glass-chart"></i>{" "}
                   Analysis
@@ -46,7 +50,6 @@ const Navigation = () => {
           </Offcanvas.Body>
         </Offcanvas>
 
-        <Navbar.Brand href="#">User Dashboard</Navbar.Brand>
         <Navbar.Toggle aria-controls="navbarScroll" />
         <Navbar.Collapse id="navbarScroll">
           <Nav
