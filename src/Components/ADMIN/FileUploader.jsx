@@ -83,7 +83,6 @@ const FileUploader = () => {
     fontSize: "1rem",
     border: "none",
     borderRadius: "25px",
-    display: "flex",
     alignItems: "center",
     justifyContent: "center",
     gap: "0.5rem",
