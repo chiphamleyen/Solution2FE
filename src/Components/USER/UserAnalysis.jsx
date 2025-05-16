@@ -1,5 +1,5 @@
 import React from 'react'
-import UserNavigation from "../Navbar/UserNavigation";
+import UserNavigation from "../Common/NavBar/UserNavigation";
 import FileUploader from '../ADMIN/FileUploader';
 
 const UserAnalysis = () => {

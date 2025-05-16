@@ -10,7 +10,7 @@ import ListGroup from "react-bootstrap/ListGroup";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import "./navbar.css";
-import ProfileImage from "../../assets/profile.png";
+import ProfileImage from "../../../assets/profile.png";
 
 const Navigation = () => {
   const [show, setShow] = useState(false);
