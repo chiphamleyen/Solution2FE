@@ -1,7 +1,7 @@
 // src/api/axiosUser.js
 import axios from "axios";
 
-const BASE_URL = 'https://networkattack-hch7gmbudveqhaau.australiaeast-01.azurewebsites.net/api/';
+const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 const axiosUser = axios.create({
   baseURL: BASE_URL,
