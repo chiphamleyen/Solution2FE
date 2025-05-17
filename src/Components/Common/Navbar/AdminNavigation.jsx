@@ -20,13 +20,13 @@ const Navigation = () => {
         {/* Collapsible Nav */}
         <Navbar.Collapse id="navbarScroll">
           <Nav className="me-auto d-flex gap-4" navbarScroll>
-            <Nav.Link as={Link} to="/AdminDash">
+            <Nav.Link as={Link} to="/admin/dashboard">
               <i className="fa-solid fa-house"></i> Dashboard
             </Nav.Link>
-            <Nav.Link as={Link} to="/Analysis">
+            <Nav.Link as={Link} to="/admin/analysis">
               <i className="fa-solid fa-magnifying-glass-chart"></i> Analysis
             </Nav.Link>
-            <Nav.Link as={Link} to="/UserManagement">
+            <Nav.Link as={Link} to="/admin/usermanagement">
               <i className="fa fa-user"></i> User Management
             </Nav.Link>
           </Nav>
@@ -40,7 +40,7 @@ const Navigation = () => {
                 style={{ width: "32px", height: "32px", borderRadius: "50%" }}
               />
             </Nav.Link>
-            <Nav.Link as={Link} to="/LoginRegister">
+            <Nav.Link as={Link} to="/admin/login">
               <i className="fa-solid fa-lock"></i> LogOut
             </Nav.Link>
           </Nav>

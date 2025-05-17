@@ -1,13 +1,13 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import AdminDash from "./Components/ADMIN/AdminDash"
-import Analysis from "./Components/ADMIN/Analysis";
+import AdminDash from "./Components/ADMIN/AdminDashboard"
+import Analysis from "./Components/ADMIN/AdminAnalysis";
 import UserManagement from "./Components/ADMIN/UserManagement";
-import UserDash from "./Components/USER/UserDash";
+import UserDash from "./Components/USER/UserDashboard";
 import UserAnalysis from "./Components/USER/UserAnalysis";
-import Register from "./Components/loginRegister/Register";
-import UserLogin from "./Components/loginRegister/UserLogin";
-import AdminLogin from "./Components/loginRegister/AdminLogin";
+import Register from "./Components/Common/Account/Register";
+import UserLogin from "./Components/Common/Account/UserLogin";
+import AdminLogin from "./Components/Common/Account/AdminLogin";
 
 
 

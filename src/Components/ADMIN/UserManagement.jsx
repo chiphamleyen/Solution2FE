@@ -1,5 +1,5 @@
 import React from 'react'
-import Navigation from "../Common/Navbar/Navigation";
+import Navigation from "../Common/Navbar/AdminNavigation";
 import { Card, ListGroup } from "react-bootstrap";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 

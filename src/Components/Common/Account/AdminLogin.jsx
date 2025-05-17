@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FaUser, FaLock } from "react-icons/fa";
-import axiosUser from "../../api/axiosUser";
-import { API_PATHS_USER } from "../../api/config";
-import "./login-register.css";
+import axiosAdmin from "../../../api/axiosAdmin";
+import { API_PATHS_ADMIN } from "../../../api/config";
+import "./login-register.css";  
 
-const UserLogin = () => {
-  const [email, setEmail] = useState("");
+const AdminLogin = () => {
+  const [email, setEmail] = useState(""); 
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
@@ -14,20 +14,29 @@ const UserLogin = () => {
     e.preventDefault();
 
     try {
-      const res = await axiosUser.post(API_PATHS_USER.LOGIN, {
+      const res = await axiosAdmin.post(API_PATHS_ADMIN.LOGIN, {
         email,
         password,
       });
 
       const data = res.data;
-      localStorage.setItem("userToken", data.token);
-      localStorage.setItem("userInfo", JSON.stringify(data.user));
+      localStorage.setItem("adminToken", data.data.access_token);
+      console.log(data.data.access_token);
 
-      navigate("/user/dashboard");
+      navigate("/admin/dashboard");
     } catch (err) {
-      console.error("User login failed:", err);
-      alert("User login failed. Please check your credentials.");
-    }
+  console.error("Admin login failed:", err);
+
+  if (err.response) {
+    console.error("Response data:", err.response.data);
+    console.error("Status code:", err.response.status);
+    console.error("Headers:", err.response.headers);
+  } else if (err.request) {
+    console.error("Request sent but no response:", err.request);
+  } else {
+    console.error("Error setting up request:", err.message);
+  }
+}
   };
 
   return (
@@ -36,7 +45,7 @@ const UserLogin = () => {
       <div className="wrapper">
         <div className="form-box login">
           <form onSubmit={handleSubmit}>
-            <h1>User Login</h1>
+            <h1>Admin Login</h1>
 
             <div className="input-box">
               <input
@@ -73,10 +82,10 @@ const UserLogin = () => {
       </div>
 
       <button className="button-79" role="button">
-        <Link to="/AdminLogin">Admin Login</Link>
+        <Link to="/user/login">User Login</Link>
       </button>
     </div>
   );
 };
 
-export default UserLogin;
+export default AdminLogin;

@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FaUser, FaLock, FaEnvelope } from "react-icons/fa";
-import axiosUser from "../../api/axiosUser";
-import { API_PATHS } from "../../api/config";
+import axiosUser from "../../../api/axiosUser";
+import { API_PATHS } from "../../../api/config";
 import "./login-register.css";
 
 const Register = () => {

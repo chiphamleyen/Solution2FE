@@ -1,7 +1,7 @@
 // src/api/axiosAdmin.js
 import axios from "axios";
 
-const BASE_URL = process.env.REACT_APP_API_BASE_URL;
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const axiosAdmin = axios.create({
   baseURL: BASE_URL,
