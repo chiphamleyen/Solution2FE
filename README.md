@@ -1,2 +1,1 @@
-# Solution2FE
-Chi's solution
+# FE for Chi's solution: Network attack classification
