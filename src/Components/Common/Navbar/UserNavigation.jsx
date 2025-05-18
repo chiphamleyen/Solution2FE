@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import "./navbar.css";
-import ProfileImage from "../../../assets/profile.png";
+import ProfileButton from "../Account/ProfileButton";
 
 const UserNavigation = () => {
   return (
@@ -32,17 +32,7 @@ const UserNavigation = () => {
           </Nav>
 
           <Nav className="d-flex gap-4">
-            <Nav.Link href="#">
-              <img
-                src={ProfileImage}
-                alt="Profile"
-                style={{
-                  width: "32px",
-                  height: "32px",
-                  borderRadius: "50%",
-                }}
-              />
-            </Nav.Link>
+            <ProfileButton />
             <Nav.Link as={Link} to="/user/login">
               <i className="fa-solid fa-lock"></i> Logout
             </Nav.Link>
