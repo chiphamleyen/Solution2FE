@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import Navigation from "../Common/Navbar/AdminNavigation";
-import { Card, ListGroup, Pagination, Badge, Button, Tabs, Tab, Modal, Form } from "react-bootstrap";
+import { Card, ListGroup, Pagination, Badge, Button, Tabs, Tab, Modal, Form, Alert } from "react-bootstrap";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import axiosAdmin from '../../api/axiosAdmin';
 import { format } from 'date-fns';
 import EditUserModal from '../Common/Account/EditUserModal';
+import { API_PATHS_ADMIN } from '../../api/config';
 
 const userLogData = [
     {
@@ -53,10 +54,15 @@ const userLogData = [
 
 const UserManagement = () => {
     const [users, setUsers] = useState([]);
+    const [feedbacks, setFeedbacks] = useState([]);
     const [currentPage, setCurrentPage] = useState({ user: 1, admin: 1 });
+    const [feedbackPage, setFeedbackPage] = useState(1);
     const [totalPages, setTotalPages] = useState({ user: 1, admin: 1 });
+    const [feedbackTotalPages, setFeedbackTotalPages] = useState(1);
     const [loading, setLoading] = useState(true);
+    const [feedbackLoading, setFeedbackLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [feedbackError, setFeedbackError] = useState(null);
     const [activeTab, setActiveTab] = useState('user');
     
     // Edit modal states
@@ -83,10 +89,14 @@ const UserManagement = () => {
         fetchUsers(currentPage[activeTab], activeTab);
     }, [currentPage, activeTab]);
 
+    useEffect(() => {
+        fetchFeedbacks();
+    }, [feedbackPage]);
+
     const fetchUsers = async (page, role) => {
         try {
             setLoading(true);
-            const response = await axiosAdmin.get(`/user_management/list_users?page=${page}&size=${pageSize}`);
+            const response = await axiosAdmin.get(`${API_PATHS_ADMIN.USER_MANAGEMENT_LIST}?page=${page}&size=${pageSize}`);
             
             if (response.data.error_code === 0) {
                 // Filter users based on role
@@ -113,7 +123,7 @@ const UserManagement = () => {
     const fetchUserById = async (userId) => {
         setFetchingUser(true);
         try {
-            const response = await axiosAdmin.get(`/user_management/${userId}`);
+            const response = await axiosAdmin.get(`${API_PATHS_ADMIN.USER_MANAGEMENT_GET_USER}/${userId}`);
             if (response.data.error_code === 0) {
                 setSelectedUser(response.data.data);
             } else {
@@ -155,7 +165,7 @@ const UserManagement = () => {
         setEditSuccess(false);
 
         try {
-            const response = await axiosAdmin.put(`/user_management/${selectedUser._id}`, formData);
+            const response = await axiosAdmin.put(`${API_PATHS_ADMIN.USER_MANAGEMENT_UPDATE_USER}/${selectedUser._id}`, formData);
             
             if (response.data.error_code === 0) {
                 setEditSuccess(true);
@@ -190,7 +200,7 @@ const UserManagement = () => {
 
         setDeleteLoading(true);
         try {
-            const response = await axiosAdmin.delete(`/user_management/${userToDelete._id}`);
+            const response = await axiosAdmin.delete(`${API_PATHS_ADMIN.USER_MANAGEMENT_DELETE_USER}/${userToDelete._id}`);
             
             if (response.data.error_code === 0) {
                 // Refresh the user list after successful deletion
@@ -212,7 +222,7 @@ const UserManagement = () => {
         setCreateAdminSuccess(false);
 
         try {
-            const response = await axiosAdmin.post('/user_management/create_new_admin', formData);
+            const response = await axiosAdmin.post(`${API_PATHS_ADMIN.USER_MANAGEMENT_CREATE_ADMIN}`, formData);
             
             if (response.data.error_code === 0) {
                 setCreateAdminSuccess(true);
@@ -403,6 +413,60 @@ const UserManagement = () => {
         </div>
     );
 
+    const fetchFeedbacks = async () => {
+        try {
+            setFeedbackLoading(true);
+            const response = await axiosAdmin.get(`${API_PATHS_ADMIN.USER_MANAGEMENT_FEEDBACK_LIST}?page=${feedbackPage}&size=${pageSize}`);
+            
+            if (response.data.error_code === 0) {
+                setFeedbacks(response.data.items);
+                setFeedbackTotalPages(Math.ceil(response.data.total / pageSize));
+            } else {
+                setFeedbackError('Failed to fetch feedbacks');
+            }
+        } catch (error) {
+            console.error('Error fetching feedbacks:', error);
+            setFeedbackError('Failed to fetch feedbacks');
+        } finally {
+            setFeedbackLoading(false);
+        }
+    };
+
+    const handleFeedbackPageChange = (page) => {
+        setFeedbackPage(page);
+    };
+
+    const FeedbacksTable = ({ feedbacks }) => (
+        <div className="table-responsive">
+            <table className="table table-hover">
+                <thead>
+                    <tr>
+                        <th>User</th>
+                        <th>Content</th>
+                        <th>Status</th>
+                        <th>Created At</th>
+                        <th>Updated At</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {feedbacks.map((feedback) => (
+                        <tr key={feedback._id}>
+                            <td>{feedback.user_name}</td>
+                            <td>{feedback.content}</td>
+                            <td>
+                                <Badge bg={feedback.status === 'pending' ? 'warning' : 'success'}>
+                                    {feedback.status}
+                                </Badge>
+                            </td>
+                            <td>{format(new Date(feedback.created_at), 'dd/MM/yyyy HH:mm')}</td>
+                            <td>{format(new Date(feedback.updated_at), 'dd/MM/yyyy HH:mm')}</td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+        </div>
+    );
+
     return (
         <>
             <Navigation />
@@ -466,7 +530,7 @@ const UserManagement = () => {
 
                 <Card style={cardStyle}>
                     <Card.Body>
-                        <Card.Title className="mb-4">User Management</Card.Title>
+                        <Card.Title className="mb-4">Account Management</Card.Title>
                         <Tabs
                             activeKey={activeTab}
                             onSelect={(k) => setActiveTab(k)}
@@ -569,6 +633,58 @@ const UserManagement = () => {
                                 )}
                             </Tab>
                         </Tabs>
+                    </Card.Body>
+                </Card>
+
+                <Card style={cardStyle}>
+                    <Card.Body>
+                        <Card.Title className="mb-4">User Feedback</Card.Title>
+                        {feedbackError && (
+                            <Alert variant="danger" className="mb-4">
+                                {feedbackError}
+                            </Alert>
+                        )}
+
+                        {feedbackLoading ? (
+                            <div className="text-center py-4">
+                                <div className="spinner-border text-primary" role="status">
+                                    <span className="visually-hidden">Loading...</span>
+                                </div>
+                            </div>
+                        ) : (
+                            <>
+                                <FeedbacksTable feedbacks={feedbacks} />
+                                <div className="d-flex justify-content-center mt-4">
+                                    <Pagination>
+                                        <Pagination.First 
+                                            disabled={feedbackPage === 1}
+                                            onClick={() => handleFeedbackPageChange(1)}
+                                        />
+                                        <Pagination.Prev 
+                                            disabled={feedbackPage === 1}
+                                            onClick={() => handleFeedbackPageChange(feedbackPage - 1)}
+                                        />
+                                        {[...Array(feedbackTotalPages)].map((_, index) => (
+                                            <Pagination.Item
+                                                key={index + 1}
+                                                active={feedbackPage === index + 1}
+                                                onClick={() => handleFeedbackPageChange(index + 1)}
+                                            >
+                                                {index + 1}
+                                            </Pagination.Item>
+                                        ))}
+                                        <Pagination.Next 
+                                            disabled={feedbackPage === feedbackTotalPages}
+                                            onClick={() => handleFeedbackPageChange(feedbackPage + 1)}
+                                        />
+                                        <Pagination.Last 
+                                            disabled={feedbackPage === feedbackTotalPages}
+                                            onClick={() => handleFeedbackPageChange(feedbackTotalPages)}
+                                        />
+                                    </Pagination>
+                                </div>
+                            </>
+                        )}
                     </Card.Body>
                 </Card>
             </div>

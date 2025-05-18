@@ -29,6 +29,9 @@ const UserNavigation = () => {
             <Nav.Link as={Link} to="/user/analysis">
               <i className="fa-solid fa-magnifying-glass-chart"></i> Analysis
             </Nav.Link>
+            <Nav.Link as={Link} to="/user/feedback">
+              <i className="fa-solid fa-comments"></i> Feedback
+            </Nav.Link>
           </Nav>
 
           <Nav className="d-flex gap-4">

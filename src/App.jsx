@@ -8,7 +8,7 @@ import UserAnalysis from "./Components/USER/UserAnalysis";
 import Register from "./Components/Common/Account/Register";
 import UserLogin from "./Components/Common/Account/UserLogin";
 import AdminLogin from "./Components/Common/Account/AdminLogin";
-
+import UserFeedback from "./Components/USER/Feedback";
 
 
 const App = () => {
@@ -29,6 +29,7 @@ const App = () => {
 
           <Route path="user/dashboard" element={<UserDash />} />
           <Route path="user/analysis" element={<UserAnalysis/>} />
+          <Route path="user/feedback" element={<UserFeedback/>} />
         </Route>
       </Routes>
     </BrowserRouter>

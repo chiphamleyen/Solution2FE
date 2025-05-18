@@ -3,6 +3,7 @@ import { Nav } from 'react-bootstrap';
 import EditUserModal from './EditUserModal';
 import axiosUser from '../../../api/axiosUser';
 import ProfileImage from '../../../assets/profile.png';
+import { API_PATHS_USER } from '../../../api/config';
 
 const ProfileButton = () => {
     const [showEditModal, setShowEditModal] = useState(false);
@@ -15,7 +16,7 @@ const ProfileButton = () => {
     const fetchProfile = async () => {
         setFetchingProfile(true);
         try {
-            const response = await axiosUser.get('/account/profile');
+            const response = await axiosUser.get(`${API_PATHS_USER.PROFILE}`);
             if (response.data.error_code === 0) {
                 setProfileData(response.data.data);
             } else {
@@ -50,7 +51,7 @@ const ProfileButton = () => {
         setSuccess(false);
 
         try {
-            const response = await axiosUser.put('/account/update_profile', formData);
+            const response = await axiosUser.put(`${API_PATHS_USER.UPDATE_PROFILE}`, formData);
             
             if (response.data.error_code === 0) {
                 setSuccess(true);
