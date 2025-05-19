@@ -32,7 +32,7 @@ const UserLogin = () => {
 
   return (
     <div className="container-1">
-      <h1>LOGIN</h1>
+      <h1>NETWORKSCAN</h1>
       <div className="wrapper">
         <div className="form-box login">
           <form onSubmit={handleSubmit}>
@@ -71,7 +71,7 @@ const UserLogin = () => {
           </form>
           <div className="register-link">
             <p style={{textAlign: "center"}}>
-              Don't have an account? <Link to="/user/register">Register</Link>
+              Don't have an account? <Link to="/register">Register</Link>
             </p>
           </div>
         </div>

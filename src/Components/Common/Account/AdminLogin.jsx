@@ -41,7 +41,7 @@ const AdminLogin = () => {
 
   return (
     <div className="container-1">
-      <h1>LOGIN</h1>
+      <h1>NETWORKSCAN</h1>
       <div className="wrapper">
         <div className="form-box login">
           <form onSubmit={handleSubmit}>

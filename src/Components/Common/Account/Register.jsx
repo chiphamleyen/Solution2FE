@@ -33,7 +33,7 @@ const Register = () => {
 
   return (
     <div className="container-1">
-      <h1>REGISTER</h1>
+      <h1>NETWORKSCAN</h1>
       <div className="wrapper active">
         <div className="form-box register">
           <form onSubmit={handleSubmit}>

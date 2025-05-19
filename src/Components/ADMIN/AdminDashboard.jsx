@@ -20,14 +20,22 @@ const AdminDash = () => {
   const navigate = useNavigate();
   const [dashboardData, setDashboardData] = useState(null);
   const [loading, setLoading] = useState(true);
+  
+  // Get initial date range (last 7 days by default)
+  const today = new Date();
+  const defaultStartDate = format(subDays(today, 6), 'yyyy-MM-dd'); // 7 days ago
+  const defaultEndDate = format(today, 'yyyy-MM-dd'); // today
+
   const [dateRange, setDateRange] = useState({
-    startDate: format(startOfWeek(new Date(), { weekStartsOn: 1 }), 'yyyy-MM-dd'),
-    endDate: format(new Date(), 'yyyy-MM-dd')
+    startDate: defaultStartDate,
+    endDate: defaultEndDate
   });
+  
   const [customDates, setCustomDates] = useState({
-    startDate: format(startOfWeek(new Date(), { weekStartsOn: 1 }), 'yyyy-MM-dd'),
-    endDate: format(new Date(), 'yyyy-MM-dd')
+    startDate: defaultStartDate,
+    endDate: defaultEndDate
   });
+  
   const [activePreset, setActivePreset] = useState('week');
   const [datasets] = useState([
     {
@@ -59,15 +67,18 @@ const AdminDash = () => {
 
     switch (preset) {
       case 'week':
-        newStartDate = format(startOfWeek(today, { weekStartsOn: 1 }), 'yyyy-MM-dd');
+        // Last 7 days
+        newStartDate = format(subDays(today, 6), 'yyyy-MM-dd');
         newEndDate = format(today, 'yyyy-MM-dd');
         break;
       case 'month':
-        newStartDate = format(startOfMonth(today), 'yyyy-MM-dd');
+        // Last 30 days
+        newStartDate = format(subDays(today, 29), 'yyyy-MM-dd');
         newEndDate = format(today, 'yyyy-MM-dd');
         break;
       case 'quarter':
-        newStartDate = format(subDays(today, 90), 'yyyy-MM-dd');
+        // Last 90 days
+        newStartDate = format(subDays(today, 89), 'yyyy-MM-dd');
         newEndDate = format(today, 'yyyy-MM-dd');
         break;
       default:
@@ -85,7 +96,28 @@ const AdminDash = () => {
     setCustomDates(newDates);
     
     if (newDates.startDate && newDates.endDate) {
+      // Validate dates
+      const start = new Date(newDates.startDate);
+      const end = new Date(newDates.endDate);
+      const today = new Date();
+      
+      // If either date is in the future, adjust to today
+      if (end > today) {
+        newDates.endDate = format(today, 'yyyy-MM-dd');
+        end = today;
+      }
+      if (start > today) {
+        newDates.startDate = format(subDays(today, 6), 'yyyy-MM-dd');
+        start = subDays(today, 6);
+      }
+      
+      // Ensure start date is not after end date
+      if (start > end) {
+        newDates.startDate = format(subDays(end, 6), 'yyyy-MM-dd');
+      }
+
       setDateRange(newDates);
+      setCustomDates(newDates);
       setActivePreset('custom');
       fetchDashboardData(newDates.startDate, newDates.endDate);
     }
@@ -94,21 +126,26 @@ const AdminDash = () => {
   const fetchDashboardData = async (startDate, endDate) => {
     try {
       setLoading(true);
+      console.log('Fetching admin dashboard data with dates:', { startDate, endDate });
       const response = await axiosAdmin.get(
-        `${API_PATHS_ADMIN.REPORT.split('?')[0]}?min_date=${startDate}&max_date=${endDate}`
+        `${API_PATHS_ADMIN.REPORT}?min_date=${startDate}&max_date=${endDate}`
       );
+      console.log('API Response:', response.data);
       if (response.data.error_code === 0) {
+        console.log('Dashboard data:', response.data.data);
         setDashboardData(response.data.data);
       }
     } catch (error) {
       console.error("Error fetching dashboard data:", error);
+      console.error("Error details:", error.response?.data);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchDashboardData(dateRange.startDate, dateRange.endDate);
+    // Initialize with last 7 days of data
+    fetchDashboardData(defaultStartDate, defaultEndDate);
   }, []);
 
   if (loading || !dashboardData) {
