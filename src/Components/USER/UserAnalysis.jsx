@@ -1,12 +1,12 @@
 import React from 'react'
-import UserNavigation from "../Navbar/UserNavigation";
-import FileUploader from '../ADMIN/FileUploader';
+import UserNavigation from "../Common/Navbar/UserNavigation";
+import UserFileUploader from './UserFileUploader';
 
 const UserAnalysis = () => {
   return (
     <>
        <UserNavigation />
-       <FileUploader/>
+       <UserFileUploader />
     </>
   )
 }
