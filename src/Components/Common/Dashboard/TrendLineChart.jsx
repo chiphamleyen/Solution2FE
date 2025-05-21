@@ -12,8 +12,8 @@ import {
 } from 'recharts';
 import { COLORS } from './ChartColors';
 import { format, subDays } from 'date-fns';
-import axiosUser from '../../../api/axiosUser';
-import { API_PATHS_USER } from '../../../api/config';
+import axiosAdmin from '../../../api/axiosAdmin';
+import { API_PATHS_ADMIN } from '../../../api/config';
 
 const TrendLineChart = () => {
   const [chartData, setChartData] = useState([]);
@@ -36,8 +36,8 @@ const TrendLineChart = () => {
 
         // Create array of promises for all API calls
         const apiPromises = dateRanges.map(({ dateRange }) => 
-          axiosUser.get(
-            `${API_PATHS_USER.REPORT.split('?')[0]}?min_date=${dateRange.yesterday}&max_date=${dateRange.today}`
+          axiosAdmin.get(
+            `${API_PATHS_ADMIN.REPORT.split('?')[0]}?min_date=${dateRange.yesterday}&max_date=${dateRange.today}`
           )
         );
 
