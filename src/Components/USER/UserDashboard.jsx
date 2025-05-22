@@ -19,7 +19,7 @@ import { Container, Row, Col, Card, ButtonGroup, Button, Form } from "react-boot
 import { FaShieldAlt, FaExclamationTriangle, FaChartPie, FaServer } from "react-icons/fa";
 import axiosUser from "../../api/axiosUser";
 import { API_PATHS_USER } from "../../api/config";
-import { format, subDays, startOfWeek, endOfWeek, startOfMonth, endOfMonth } from 'date-fns';
+import { format, subDays, startOfWeek, endOfWeek, startOfMonth, endOfMonth, addDays } from 'date-fns';
 import MalwareDistributionChart from "../Common/Dashboard/MalwareDistributionChart";
 import MalwareTypePieChart from "../Common/Dashboard/MalwareTypePieChart";
 import MalwareVsBenignChart from "../Common/Dashboard/MalwareVsBenignChart";
@@ -69,6 +69,7 @@ const UserDash = () => {
   const today = new Date();
   const defaultStartDate = format(subDays(today, 6), 'yyyy-MM-dd'); // 7 days ago
   const defaultEndDate = format(today, 'yyyy-MM-dd'); // today
+  const adjustedEndDate = format(addDays(today, 1), 'yyyy-MM-dd'); // today + 1 to include full current day
 
   const [dateRange, setDateRange] = useState({
     startDate: defaultStartDate,
@@ -109,7 +110,7 @@ const UserDash = () => {
     setDateRange({ startDate: newStartDate, endDate: newEndDate });
     setCustomDates({ startDate: newStartDate, endDate: newEndDate });
     setActivePreset(preset);
-    fetchDashboardData(newStartDate, newEndDate);
+    fetchDashboardData(newStartDate, format(addDays(new Date(newEndDate), 1), 'yyyy-MM-dd')); // Add one day to include today's data
   };
 
   const handleCustomDateChange = (e, type) => {
@@ -118,8 +119,8 @@ const UserDash = () => {
     
     if (newDates.startDate && newDates.endDate) {
       // Validate dates
-      const start = new Date(newDates.startDate);
-      const end = new Date(newDates.endDate);
+      let start = new Date(newDates.startDate);
+      let end = new Date(newDates.endDate);
       const today = new Date();
       
       // If either date is in the future, adjust to today
@@ -140,7 +141,7 @@ const UserDash = () => {
       setDateRange(newDates);
       setCustomDates(newDates);
       setActivePreset('custom');
-      fetchDashboardData(newDates.startDate, newDates.endDate);
+      fetchDashboardData(newDates.startDate, format(addDays(new Date(newDates.endDate), 1), 'yyyy-MM-dd')); // Add one day to include today's data
     }
   };
 
@@ -166,7 +167,7 @@ const UserDash = () => {
 
   useEffect(() => {
     // Initialize with last 7 days of data
-    fetchDashboardData(defaultStartDate, defaultEndDate);
+    fetchDashboardData(defaultStartDate, format(addDays(new Date(defaultEndDate), 1), 'yyyy-MM-dd')); // Add one day to include today's data
   }, []);
 
   if (loading || !dashboardData) {

@@ -11,7 +11,7 @@ import {
   ResponsiveContainer
 } from 'recharts';
 import { COLORS } from './ChartColors';
-import { format, subDays } from 'date-fns';
+import { format, subDays, addDays } from 'date-fns';
 import axiosAdmin from '../../../api/axiosAdmin';
 import { API_PATHS_ADMIN } from '../../../api/config';
 
@@ -28,16 +28,18 @@ const TrendLineChart = () => {
           const targetDate = subDays(new Date(), i);
           const yesterday = format(subDays(targetDate, 1), 'yyyy-MM-dd');
           const today = format(targetDate, 'yyyy-MM-dd');
+          // Adjust the max date to include full day data
+          const adjustedToday = format(addDays(targetDate, 1), 'yyyy-MM-dd');
           return {
             date: format(targetDate, 'MMM dd'),
-            dateRange: { yesterday, today }
+            dateRange: { yesterday, today, adjustedToday }
           };
         }).reverse(); // Reverse to get chronological order
 
         // Create array of promises for all API calls
         const apiPromises = dateRanges.map(({ dateRange }) => 
           axiosAdmin.get(
-            `${API_PATHS_ADMIN.REPORT.split('?')[0]}?min_date=${dateRange.yesterday}&max_date=${dateRange.today}`
+            `${API_PATHS_ADMIN.REPORT.split('?')[0]}?min_date=${dateRange.yesterday}&max_date=${dateRange.adjustedToday}`
           )
         );
 

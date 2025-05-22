@@ -4,7 +4,7 @@ import Navigation from "../Common/Navbar/AdminNavigation";
 import { Container, Row, Col } from "react-bootstrap";
 import axiosAdmin from "../../api/axiosAdmin";
 import { API_PATHS_ADMIN } from "../../api/config";
-import { format, subDays, startOfWeek, startOfMonth } from 'date-fns';
+import { format, subDays, startOfWeek, startOfMonth, addDays } from 'date-fns';
 
 // Import shared components
 import StatsCards from "../Common/Dashboard/StatsCards";
@@ -25,6 +25,7 @@ const AdminDash = () => {
   const today = new Date();
   const defaultStartDate = format(subDays(today, 6), 'yyyy-MM-dd'); // 7 days ago
   const defaultEndDate = format(today, 'yyyy-MM-dd'); // today
+  const adjustedEndDate = format(addDays(today, 1), 'yyyy-MM-dd'); // today + 1 to include full current day
 
   const [dateRange, setDateRange] = useState({
     startDate: defaultStartDate,
@@ -88,7 +89,7 @@ const AdminDash = () => {
     setDateRange({ startDate: newStartDate, endDate: newEndDate });
     setCustomDates({ startDate: newStartDate, endDate: newEndDate });
     setActivePreset(preset);
-    fetchDashboardData(newStartDate, newEndDate);
+    fetchDashboardData(newStartDate, format(addDays(new Date(newEndDate), 1), 'yyyy-MM-dd')); // Add one day to include today's data
   };
 
   const handleCustomDateChange = (e, type) => {
@@ -97,8 +98,8 @@ const AdminDash = () => {
     
     if (newDates.startDate && newDates.endDate) {
       // Validate dates
-      const start = new Date(newDates.startDate);
-      const end = new Date(newDates.endDate);
+      let start = new Date(newDates.startDate);
+      let end = new Date(newDates.endDate);
       const today = new Date();
       
       // If either date is in the future, adjust to today
@@ -119,7 +120,7 @@ const AdminDash = () => {
       setDateRange(newDates);
       setCustomDates(newDates);
       setActivePreset('custom');
-      fetchDashboardData(newDates.startDate, newDates.endDate);
+      fetchDashboardData(newDates.startDate, format(addDays(new Date(newDates.endDate), 1), 'yyyy-MM-dd')); // Add one day to include today's data
     }
   };
 
@@ -145,7 +146,7 @@ const AdminDash = () => {
 
   useEffect(() => {
     // Initialize with last 7 days of data
-    fetchDashboardData(defaultStartDate, defaultEndDate);
+    fetchDashboardData(defaultStartDate, format(addDays(new Date(defaultEndDate), 1), 'yyyy-MM-dd')); // Add one day to include today's data
   }, []);
 
   if (loading || !dashboardData) {
