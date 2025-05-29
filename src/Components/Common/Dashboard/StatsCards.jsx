@@ -25,7 +25,7 @@ const StatsCards = ({ dashboardData }) => {
               <h6 className="card-title mb-0" style={{ color: "#475569" }}>Mean Severity</h6>
             </div>
             <h3 className="mb-0" style={{ color: severityColor, fontWeight: "600" }}>
-              {dashboardData.mean_severity.toFixed(3)}
+              {dashboardData.mean_severity}
             </h3>
             <small style={{ color: "#64748b" }}>{severityLevel} Risk Level</small>
           </Card.Body>
